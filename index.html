@@ -4,32 +4,74 @@
   <meta charset="UTF-8" />
   <title>Redirección WhatsApp Guardia</title>
   <script>
-    function redirigirSegunHorario() {
-      const ahora = new Date();
-      const hora = ahora.getHours();
+    // Configuración de guardias por día y horario
+    const guardias = {
+      // 0 es Domingo
+      0: null, // NO SE ATIENDE DOMINGO
+      1: { // Lunes
+        manana: {nombre: "JAVIER", numero: "5492616942510"},
+        tarde:  {nombre: "MARCELA", numero: "5492616942521"},
+        noche:  {nombre: "JAVIER", numero: "5492616942510"}
+      },
+      2: { // Martes
+        manana: {nombre: "JAVIER", numero: "5492616942510"},
+        tarde:  {nombre: "MARCELA", numero: "5492616942521"},
+        noche:  {nombre: "JAVIER", numero: "5492616942510"}
+      },
+      3: { // Miércoles
+        manana: {nombre: "JAVIER", numero: "5492616942510"},
+        tarde:  {nombre: "MARCELA", numero: "5492616942521"},
+        noche:  {nombre: "JAVIER", numero: "5492616942510"}
+      },
+      4: { // Jueves
+        manana: {nombre: "JAVIER", numero: "5492616942510"},
+        tarde:  {nombre: "MARCELA", numero: "5492616942521"},
+        noche:  {nombre: "JAVIER", numero: "5492616942510"}
+      },
+      5: { // Viernes
+        manana: {nombre: "JAVIER", numero: "5492616942510"},
+        tarde:  {nombre: "MARCELA", numero: "5492616942521"},
+        noche:  {nombre: "JAVIER", numero: "5492616942510"}
+      },
+      6: { // Sábado
+        manana: {nombre: "JAVIER", numero: "5492616942510"},
+        tarde:  {nombre: "JAVIER", numero: "5492616942510"},
+        noche:  {nombre: "JAVIER", numero: "5492616942510"}
+      }
+    };
 
-      // Definición de horarios y números
-      let numero;
+    function redirigirSegunGuardia() {
+      const ahora = new Date();
+      const dia = ahora.getDay(); // 0=Domingo, 1=Lunes...
+      const hora = ahora.getHours();
+      let franja = null;
 
       if (hora >= 7 && hora < 13) {
-        numero = "5492611111111"; // Guardia Mañana
+        franja = "manana";
       } else if (hora >= 13 && hora < 18) {
-        numero = "5492612222222"; // Guardia Tarde
-      } else if (hora >= 18 && hora < 23) {
-        numero = "5492613333333"; // Guardia Noche
-      } else {
-        numero = "5492614444444"; // Guardia Fuera de Horario
+        franja = "tarde";
+      } else if (hora >= 18 && hora < 20) {
+        franja = "noche";
       }
 
-      const mensaje = encodeURIComponent("Hola, necesito asistencia.");
+      // Si es domingo o fuera de horario de guardia, mostrar mensaje
+      if (!guardias[dia] || !franja || !guardias[dia][franja]) {
+        document.body.innerHTML = "<h2>No hay guardia disponible en este momento.</h2><p>Por favor, comunicate en horario de atención.</p>";
+        return;
+      }
+
+      const guardia = guardias[dia][franja];
+      const numero = guardia.numero;
+      const nombre = guardia.nombre;
+      const mensaje = encodeURIComponent("Hola, necesito asistencia. ¿Está " + nombre + "?");
       const url = `https://wa.me/${numero}?text=${mensaje}`;
       window.location.href = url;
     }
 
-    window.onload = redirigirSegunHorario;
+    window.onload = redirigirSegunGuardia;
   </script>
 </head>
 <body>
-  <p>Redirigiendo automáticamente al WhatsApp de guardia...</p>
+  <p>Redirigiendo automáticamente al WhatsApp de guardia según el día y franja horaria...</p>
 </body>
 </html>
