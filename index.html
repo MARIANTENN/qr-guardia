@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Redirección WhatsApp Guardia</title>
+  <script>
+    function redirigirSegunHorario() {
+      const ahora = new Date();
+      const hora = ahora.getHours();
+
+      // Definición de horarios y números
+      let numero;
+
+      if (hora >= 7 && hora < 13) {
+        numero = "5492611111111"; // Guardia Mañana
+      } else if (hora >= 13 && hora < 18) {
+        numero = "5492612222222"; // Guardia Tarde
+      } else if (hora >= 18 && hora < 23) {
+        numero = "5492613333333"; // Guardia Noche
+      } else {
+        numero = "5492614444444"; // Guardia Fuera de Horario
+      }
+
+      const mensaje = encodeURIComponent("Hola, necesito asistencia.");
+      const url = `https://wa.me/${numero}?text=${mensaje}`;
+      window.location.href = url;
+    }
+
+    window.onload = redirigirSegunHorario;
+  </
